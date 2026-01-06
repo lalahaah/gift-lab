@@ -1,0 +1,62 @@
+import 'package:go_router/go_router.dart';
+import '../../presentation/core/main_scaffold.dart';
+import '../../presentation/pages/home/home_page.dart';
+import '../../presentation/pages/results/results_page.dart';
+import '../../presentation/pages/profile/profile_page.dart';
+import '../../presentation/pages/settings/settings_page.dart';
+
+/// 기프트랩 앱의 GoRouter 설정
+///
+/// ShellRoute를 사용하여 바텀 네비게이션을 유지하면서
+/// 각 탭 간 전환을 구현합니다.
+class AppRouter {
+  AppRouter._(); // Private constructor
+
+  /// GoRouter 인스턴스
+  static final GoRouter router = GoRouter(
+    initialLocation: '/home',
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) {
+          return MainScaffold(child: child);
+        },
+        routes: [
+          // 홈 - 선물 검색 시작 화면
+          GoRoute(
+            path: '/home',
+            name: 'home',
+            pageBuilder: (context, state) =>
+                NoTransitionPage(key: state.pageKey, child: const HomePage()),
+          ),
+          // 결과 - AI 추천 결과 리스트
+          GoRoute(
+            path: '/results',
+            name: 'results',
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const ResultsPage(),
+            ),
+          ),
+          // 프로필 - 사용자 정보 및 분석 이력
+          GoRoute(
+            path: '/profile',
+            name: 'profile',
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const ProfilePage(),
+            ),
+          ),
+          // 설정 - 앱 설정 및 정보
+          GoRoute(
+            path: '/settings',
+            name: 'settings',
+            pageBuilder: (context, state) => NoTransitionPage(
+              key: state.pageKey,
+              child: const SettingsPage(),
+            ),
+          ),
+        ],
+      ),
+    ],
+  );
+}

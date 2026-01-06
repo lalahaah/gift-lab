@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyDctxIHQ2ezwXegS9Aw8vxFBAQ-lP5zWzQ</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1017135920994</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.giftLab</string>
+	<key>PROJECT_ID</key>
+	<string>giftlab-f118f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>giftlab-f118f.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1017135920994:ios:1e3ace3fbaca56d36ade3b</string>
+</dict>
+</plist>
