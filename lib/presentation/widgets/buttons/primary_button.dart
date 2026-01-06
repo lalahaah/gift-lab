@@ -48,14 +48,16 @@ class PrimaryButton extends StatelessWidget {
             ElevatedButton.styleFrom(
               backgroundColor: AppColors.labIndigo,
               foregroundColor: AppColors.pureWhite,
-              disabledBackgroundColor: AppColors.textGray.withOpacity(0.3),
+              disabledBackgroundColor: AppColors.textGray.withValues(
+                alpha: 0.3,
+              ),
               disabledForegroundColor: AppColors.pureWhite,
               padding: AppSpacing.paddingHorizontalM,
               shape: RoundedRectangleBorder(
                 borderRadius: AppRadius.buttonRadius,
               ),
               elevation: 0,
-              shadowColor: AppColors.labIndigo.withOpacity(0.3),
+              shadowColor: AppColors.labIndigo.withValues(alpha: 0.3),
             ).copyWith(
               elevation: WidgetStateProperty.resolveWith<double>((
                 Set<WidgetState> states,

@@ -46,7 +46,9 @@ class SecondaryButton extends StatelessWidget {
         style:
             OutlinedButton.styleFrom(
               foregroundColor: AppColors.labIndigo,
-              disabledForegroundColor: AppColors.textGray.withOpacity(0.5),
+              disabledForegroundColor: AppColors.textGray.withValues(
+                alpha: 0.5,
+              ),
               padding: AppSpacing.paddingHorizontalM,
               shape: RoundedRectangleBorder(
                 borderRadius: AppRadius.buttonRadius,
@@ -58,7 +60,7 @@ class SecondaryButton extends StatelessWidget {
               ) {
                 if (states.contains(WidgetState.disabled)) {
                   return BorderSide(
-                    color: AppColors.textGray.withOpacity(0.3),
+                    color: AppColors.textGray.withValues(alpha: 0.3),
                     width: 1.5,
                   );
                 }

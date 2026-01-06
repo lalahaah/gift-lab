@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1017135920994",
+    "project_id": "giftlab-f118f",
+    "storage_bucket": "giftlab-f118f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1017135920994:android:c9e0903cb722082e6ade3b",
+        "android_client_info": {
+          "package_name": "com.example.gift_lab"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1017135920994-lih4p7o4nngfet5pfo3kk2tc6e4oo2l8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDFJQo3Nf-KPwvJ0e4yOfW64DLqyRV7TY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1017135920994-lih4p7o4nngfet5pfo3kk2tc6e4oo2l8.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1017135920994-j6n7bk75h95js7rirg6gn2dkim1qp21a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.giftLab"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

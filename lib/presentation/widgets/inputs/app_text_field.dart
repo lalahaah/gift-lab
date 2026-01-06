@@ -152,7 +152,7 @@ class AppTextField extends StatelessWidget {
         ),
         // Hint 스타일
         hintStyle: TextStyle(
-          color: AppColors.textGray.withOpacity(0.6),
+          color: AppColors.textGray.withValues(alpha: 0.6),
           fontSize: 16.0,
           fontWeight: FontWeight.w400,
         ),

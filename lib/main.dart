@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
@@ -10,6 +10,9 @@ Future<void> main() async {
   // Flutter 바인딩 초기화
   WidgetsFlutterBinding.ensureInitialized();
 
+  // EasyLocalization 초기화
+  await EasyLocalization.ensureInitialized();
+
   // Firebase 초기화
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
@@ -17,8 +20,16 @@ Future<void> main() async {
   AppTheme.initialize();
 
   runApp(
-    // Riverpod ProviderScope로 앱 래핑
-    const ProviderScope(child: GiftLabApp()),
+    // EasyLocalization으로 앱 래핑
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('ko'), // 한국어
+        Locale('en'), // 영어
+      ],
+      path: 'assets/translations', // 번역 파일 경로
+      fallbackLocale: const Locale('ko'), // 기본 언어: 한국어
+      child: const ProviderScope(child: GiftLabApp()),
+    ),
   );
 }
 
@@ -28,8 +39,13 @@ class GiftLabApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Gift Lab',
+      title: 'app.name'.tr(), // 다국어 지원
       debugShowCheckedModeBanner: false,
+
+      // EasyLocalization 설정
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
 
       // 디자인 시스템 테마 적용
       theme: AppTheme.lightTheme,

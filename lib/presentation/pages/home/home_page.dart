@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// 홈 화면 - 선물 검색 시작 화면
 ///
@@ -11,7 +12,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('기프트랩')),
+      appBar: AppBar(title: Text('app.name'.tr())),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(20),
@@ -29,7 +30,7 @@ class HomePage extends StatelessWidget {
 
               // 메인 타이틀
               Text(
-                '완벽한 선물을 찾아드려요',
+                'home.subtitle'.tr(),
                 style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
@@ -37,7 +38,7 @@ class HomePage extends StatelessWidget {
 
               // 서브 타이틀
               Text(
-                'AI가 분석한 맞춤형 선물 추천\n입력 → 결과를 최단 경로로',
+                'home.description'.tr(),
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
@@ -51,7 +52,7 @@ class HomePage extends StatelessWidget {
                     const SnackBar(content: Text('선물 분석 플로우는 다음 단계에서 구현됩니다')),
                   );
                 },
-                child: const Text('선물 분석 시작하기'),
+                child: Text('home.start_analysis'.tr()),
               ),
               const SizedBox(height: 16),
 
@@ -60,7 +61,7 @@ class HomePage extends StatelessWidget {
                 onPressed: () {
                   context.go('/results');
                 },
-                child: const Text('이전 결과 보기'),
+                child: Text('home.view_results'.tr()),
               ),
             ],
           ),
