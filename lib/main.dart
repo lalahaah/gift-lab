@@ -28,6 +28,7 @@ Future<void> main() async {
       ],
       path: 'assets/translations', // 번역 파일 경로
       fallbackLocale: const Locale('ko'), // 기본 언어: 한국어
+      startLocale: const Locale('ko'), // 앱 시작 시 언어: 한국어
       child: const ProviderScope(child: GiftLabApp()),
     ),
   );

@@ -42,6 +42,7 @@ flutter:
   # Assets (번역 파일, 아이콘, 이미지 등)
   assets:
     - assets/translations/
+    - assets/images/
   
   # Pretendard 폰트는 google_fonts 패키지를 통해 자동으로 다운로드됩니다.
   # 로컬 폰트 파일을 사용하려면 아래 주석을 해제하고 fonts/ 폴더에 폰트 파일을 추가하세요.

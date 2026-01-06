@@ -4,6 +4,7 @@ import '../../presentation/pages/home/home_page.dart';
 import '../../presentation/pages/results/results_page.dart';
 import '../../presentation/pages/profile/profile_page.dart';
 import '../../presentation/pages/settings/settings_page.dart';
+import '../../presentation/pages/splash/splash_page.dart';
 
 /// 기프트랩 앱의 GoRouter 설정
 ///
@@ -14,8 +15,15 @@ class AppRouter {
 
   /// GoRouter 인스턴스
   static final GoRouter router = GoRouter(
-    initialLocation: '/home',
+    initialLocation: '/splash',
     routes: [
+      // 스플래시 페이지 (앱 시작 시 표시)
+      GoRoute(
+        path: '/splash',
+        name: 'splash',
+        pageBuilder: (context, state) =>
+            NoTransitionPage(key: state.pageKey, child: const SplashPage()),
+      ),
       ShellRoute(
         builder: (context, state, child) {
           return MainScaffold(child: child);
