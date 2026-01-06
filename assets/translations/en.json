@@ -11,10 +11,17 @@
     },
     "home": {
         "welcome": "Welcome! 🎁",
+        "welcome_guest": "Welcome! 🎁",
+        "welcome_user": "Hello, {{name}}!",
+        "free_analysis_left": "{{count}} free analyses left",
         "subtitle": "AI-Powered Perfect Gifts",
+        "main_message": "Find the perfect gift\nwith AI recommendations",
         "description": "Find the perfect gift for your loved ones.\nGiftLab recommends the best gifts using AI technology.",
+        "subtitle_guest": "Perfect gifts for your loved ones,\nrecommended by GiftLab AI",
         "start_analysis": "Start Gift Analysis",
-        "view_results": "View Previous Results"
+        "view_results": "View Previous Results",
+        "quick_access": "Quick Access",
+        "manage_anniversaries": "Manage Anniversaries"
     },
     "profile": {
         "title": "Profile",

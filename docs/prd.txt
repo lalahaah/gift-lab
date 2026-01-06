@@ -1,0 +1,128 @@
+2. 기프트랩(Gift Lab) 상세 서비스 기획서 (PRD)
+문서 버전
+작성일
+작성자
+상태
+v1.0
+2026-01-05
+Next Engine
+MVP 확정
+1. 개요 (Overview)
+1.1. 제품 소개
+**기프트랩(Gift Lab)**은 사용자가 입력한 선물 받는 사람의 특성(MBTI, 성격, 관계 등)을 AI가 분석하여, 실패 없는 최적의 선물을 추천하고 쿠팡 최저가 구매 링크를 제공하는 초개인화 선물 큐레이션 플랫폼이다.
+1.2. 개발 목표 (Goal)
+Time-to-Value 단축: 사용자가 앱 실행 후 1분 이내에 "살 만한 선물" 리스트를 확보하게 한다.
+수익화 극대화: 로딩 화면(전면 광고)과 구매 링크(쿠팡 파트너스)를 통한 하이브리드 수익 모델 검증.
+데이터 자산화: 한국 2040 세대의 선물 취향 및 클릭 데이터를 축적하여 추후 B2B 데이터 사업으로 확장.
+1.3. 타겟 유저 (Persona)
+Main: 센스 있는 선물을 하고 싶지만 검색할 시간은 부족한 2030 직장인.
+Sub: 썸 타는 사이, 직장 상사 등 어려운 관계의 선물을 고민하는 남녀.
+2. 사용자 경험 (UX Flow) & 핵심 기능
+2.1. 전체 플로우 (User Journey Map)
+Splash (로고) → Onboarding (5단계 입력) → Analysis (로딩/광고) → Result (큐레이션 카드) → Outlink (쿠팡)
+2.2. 화면별 상세 기능 명세
+A. 스플래시 & 메인 (Splash)
+UI: '연구소' 컨셉의 로고 애니메이션 (Lottie).
+Action: 앱 실행 시 Supabase 익명 로그인 처리 (User ID 발급).
+Copy: "당신의 센스를 연구합니다, Gift Lab."
+B. 선물 의뢰서 작성 (Input Form) - 핵심
+사용자 이탈을 막기 위해 Step-by-Step (PageView) 방식으로 구성.
+단계
+질문 내용
+입력 방식
+비고
+Step 1
+누구에게 선물하나요?
+버튼 선택 (연인/친구/부모님/직장동료/기타) + 성별/연령대
+관계별 어조 분석용
+Step 2
+어떤 날인가요?
+버튼 선택 (생일/집들이/기념일/가벼운선물/사과/고백)
+상황 맥락 파악
+Step 3
+그 사람은 어떤 사람인가요?
+MBTI 선택 (E/I, N/S.. 토글) + 키워드 태그 (감성적/실용적/덕후 기질 등)
+핵심 차별화 포인트
+Step 4
+예산은 어느 정도인가요?
+슬라이더 (1만원~50만원 이상)
+쿠팡 필터링 기준
+Step 5
+피하고 싶은 선물이 있나요?
+텍스트 입력 (선택사항)
+예: "꽃다발 싫어함", "현금 제외"
+C. 분석 로딩 (Loading & Monetization)
+Visual: "수석 연구원이 12,000개의 데이터를 분석 중입니다..." 문구와 연구소 애니메이션.
+Ad Logic: 로딩 시작 1초 후 AdMob 전면 광고(Interstitial) 호출.
+정책: 사용자가 닫기 버튼을 누르면 분석 완료된 결과 페이지 노출.
+D. 큐레이션 리포트 (Result Page)
+구성: 3~5개의 추천 선물 카드 (Swiper UI).
+Card UI:
+상품명: AI가 추천한 구체적 품목 (예: "탬버린즈 핸드크림" 대신 "논픽션 상탈 핸드크림").
+추천 소견서: AI가 작성한 추천 이유 (예: "INFJ 친구에게는 혼자만의 시간에 향기를 더해주는 이 제품이 완벽합니다.").
+검색 키워드: 쿠팡 검색용 텍스트.
+Bottom Action: "최저가 확인하러 가기" 버튼 (쿠팡 딥링크).
+Ad Logic: 리스트 하단에 AdMob 배너 광고 고정 노출.
+E. 기능 및 공유 (Utility)
+공유하기: 카카오톡 공유 API 연동 (추천 리스트 텍스트 + 앱 다운로드 링크).
+다시하기: 입력했던 값 유지한 채 'Step 1'으로 돌아가기.
+3. 데이터 및 AI 로직 (Data & AI Logic)
+3.1. 프롬프트 엔지니어링 (System Prompt)
+Role: "까칠하지만 센스 있는 20대 선물 편집샵 MD".
+Output Format: 반드시 JSON 포맷 준수.
+Logic:
+사용자의 '피하고 싶은 선물'을 최우선 배제.
+입력된 예산 범위 내의 상품군 선정.
+단순 카테고리가 아닌 구체적인 브랜드나 제품명 명시.
+// AI 응답 예시 (Edge Function Response)
+{
+  "recommendations": [
+    {
+      "product_name": "일력 달력 (힙한 디자인)",
+      "reason": "J성향이 강한 친구에게는 계획을 세울 수 있는 아이템이 최고죠. 하지만 뻔한 다이어리보다는 인테리어 오브제가 되는 일력이 트렌드입니다.",
+      "search_keyword": "2026 디자인 일력 달력",
+      "estimated_price": "20000"
+    },
+    ...
+  ]
+}
+
+3.2. 쿠팡 파트너스 연동 로직
+1단계 (MVP): 별도의 상품 DB 크롤링 없이, AI가 준 search_keyword를 이용해 쿠팡 검색 결과 페이지로 이동시키는 방식 채택 (개발 공수 최소화).
+URL Scheme: coupang://search?q={search_keyword}
+Web Fallback: https://www.coupang.com/np/search?q={search_keyword}
+Note: 추후 쿠팡 파트너스 API 승인 시 '특정 상품 URL'로 고도화.
+4. 기술 아키텍처 (Tech Stack)
+4.1. Frontend
+Framework: Flutter (Android/iOS 동시 배포).
+State Management: Riverpod (입력 폼 상태 관리).
+Network: Dio (Supabase Edge Function 통신).
+4.2. Backend & Database (Supabase)
+Auth: Anonymous Login (익명 로그인 - 진입 장벽 제거).
+Edge Functions (Deno): OpenAI API(gpt-4o-mini) 호출 및 프롬프트 주입 중계 역할. (클라이언트에서 직접 호출 금지 - API Key 보안).
+4.3. DB Schema (PostgreSQL)
+테이블명
+역할
+주요 컬럼
+users
+사용자 식별
+id(uuid), created_at, device_os
+gift_requests
+요청 로그
+user_id, relation, mbti, budget, prompt_text
+recommendations
+추천 결과
+request_id, product_name, coupang_keyword
+click_logs
+전환 추적
+user_id, rec_id, timestamp (어떤 상품을 클릭했는지)
+5. 정책 및 운영 가이드 (Policy)
+5.1. 필수 고지 사항
+쿠팡 파트너스: 앱 내 결과 화면 하단에 반드시 "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다." 문구를 명시해야 함 (법적 의무).
+5.2. 예외 처리 정책
+AI 응답 지연: 10초 이상 응답 없을 시, "AI 연구원이 고민 중입니다..." 토스트 메시지 노출 및 타임아웃 처리.
+부적절한 입력: 성적인 단어, 욕설 등 필터링 로직 추가 (OpenAI Moderation API 활용).
+6. 개발 마일스톤 (Schedule)
+Sprint 1 (1주차): 프로젝트 셋업, UI 퍼블리싱 (입력폼 완료), Supabase 연동.
+Sprint 2 (2주차): Edge Function 구현 (AI 연결), 프롬프트 튜닝, 결과 페이지 연동.
+Sprint 3 (3주차): AdMob 광고 삽입, 쿠팡 딥링크 테스트, 앱 스토어 심사 준비.

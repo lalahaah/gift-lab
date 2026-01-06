@@ -11,10 +11,17 @@
     },
     "home": {
         "welcome": "안녕하세요! 🎁",
+        "welcome_guest": "환영합니다! 🎁",
+        "welcome_user": "{{name}}님, 반갑습니다!",
+        "free_analysis_left": "무료 분석 {{count}}회 남음",
         "subtitle": "AI가 추천하는 완벽한 선물",
+        "main_message": "AI가 추천하는\n완벽한 선물을 찾아보세요",
         "description": "소중한 사람에게 딱 맞는 선물을 찾아보세요.\n기프트랩이 AI 기술로 최적의 선물을 추천해 드립니다.",
+        "subtitle_guest": "소중한 사람에게 딱 맞는 선물,\n기프트랩이 AI로 추천해 드립니다",
         "start_analysis": "선물 분석 시작하기",
-        "view_results": "이전 결과 보기"
+        "view_results": "이전 결과 보기",
+        "quick_access": "빠른 액세스",
+        "manage_anniversaries": "기념일 관리"
     },
     "profile": {
         "title": "프로필",
