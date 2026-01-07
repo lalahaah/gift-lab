@@ -70,6 +70,7 @@
         "signup_title": "Sign Up",
         "forgot_password": "Forgot your password?",
         "login_success": "Successfully signed in!",
+        "logout": "Sign Out",
         "logout_success": "Successfully signed out",
         "signup_success": "Sign up complete!"
     },

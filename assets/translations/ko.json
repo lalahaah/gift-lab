@@ -70,6 +70,7 @@
         "signup_title": "회원가입",
         "forgot_password": "비밀번호를 잊으셨나요?",
         "login_success": "로그인 성공!",
+        "logout": "로그아웃",
         "logout_success": "로그아웃되었습니다",
         "signup_success": "회원가입이 완료되었습니다!"
     },

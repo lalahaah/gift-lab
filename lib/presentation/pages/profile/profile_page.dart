@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:easy_localization/easy_localization.dart';
 import '../../../providers/usage/usage_limit_provider.dart';
 import '../../../providers/auth/auth_provider.dart';
 
@@ -34,7 +36,7 @@ class ProfilePage extends ConsumerWidget {
     final remainingCount = ref.watch(remainingFreeCountProvider);
 
     return Center(
-      child: Padding(
+      child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +60,9 @@ class ProfilePage extends ConsumerWidget {
             // 게스트 안내
             Text(
               '로그인하고 더 많은 기능을 사용하세요',
-              style: Theme.of(context).textTheme.titleLarge,
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
@@ -90,26 +94,38 @@ class ProfilePage extends ConsumerWidget {
             const SizedBox(height: 32),
 
             // 로그인 버튼
-            ElevatedButton(
-              onPressed: () {
-                // TODO: 로그인 페이지로 이동
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('로그인 기능은 다음 단계에서 구현됩니다')),
-                );
-              },
-              child: const Text('로그인'),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: ElevatedButton(
+                onPressed: () {
+                  context.push('/login');
+                },
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('로그인'),
+              ),
             ),
             const SizedBox(height: 12),
 
             // 회원가입 버튼
-            OutlinedButton(
-              onPressed: () {
-                // TODO: 회원가입 페이지로 이동
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('회원가입 기능은 다음 단계에서 구현됩니다')),
-                );
-              },
-              child: const Text('회원가입'),
+            SizedBox(
+              width: double.infinity,
+              height: 48,
+              child: OutlinedButton(
+                onPressed: () {
+                  context.push('/signup');
+                },
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text('회원가입'),
+              ),
             ),
 
             const SizedBox(height: 32),
@@ -158,7 +174,150 @@ class ProfilePage extends ConsumerWidget {
 
   /// 로그인 사용자 UI
   Widget _buildLoggedInView(BuildContext context, WidgetRef ref) {
-    // TODO: 사용자 정보, 분석 이력, 기념일 등 표시
-    return const Center(child: Text('로그인 사용자 프로필 (추후 구현)'));
+    final user = ref.watch(currentUserProvider);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // 사용자 정보 카드
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer,
+                  child: Text(
+                    user?.email?.substring(0, 1).toUpperCase() ?? 'U',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user?.displayName ?? '사용자',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        user?.email ?? '',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 32),
+
+          // 메뉴 리스트
+          _buildMenuItem(
+            context,
+            icon: Icons.history,
+            title: '분석 이력',
+            onTap: () {
+              // TODO: 분석 이력 페이지 이동
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('준비 중인 기능입니다')));
+            },
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.favorite_border,
+            title: '저장한 선물',
+            onTap: () {
+              // TODO: 저장한 선물 페이지 이동
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('준비 중인 기능입니다')));
+            },
+          ),
+          _buildMenuItem(
+            context,
+            icon: Icons.cake_outlined,
+            title: '기념일 관리',
+            onTap: () {
+              // TODO: 기념일 관리 페이지 이동
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('준비 중인 기능입니다')));
+            },
+          ),
+
+          const SizedBox(height: 32),
+
+          // 로그아웃 버튼
+          OutlinedButton.icon(
+            onPressed: () async {
+              try {
+                await ref.read(authServiceProvider).signOut();
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('auth.logout_success'.tr())),
+                  );
+                }
+              } catch (e) {
+                if (context.mounted) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(e.toString())));
+                }
+              }
+            },
+            icon: const Icon(Icons.logout),
+            label: Text('auth.logout'.tr()), // '로그아웃'
+            style: OutlinedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(vertical: 12),
+              side: BorderSide(
+                color: Theme.of(context).colorScheme.outlineVariant,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuItem(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required VoidCallback onTap,
+  }) {
+    return ListTile(
+      leading: Icon(icon, color: Theme.of(context).colorScheme.primary),
+      title: Text(title),
+      trailing: const Icon(Icons.chevron_right, size: 20),
+      onTap: onTap,
+      contentPadding: EdgeInsets.zero,
+    );
   }
 }
