@@ -61,7 +61,9 @@
         "loading": "로딩 중...",
         "error": "오류가 발생했습니다",
         "retry": "다시 시도",
-        "success": "성공"
+        "success": "성공",
+        "next": "다음",
+        "required_fields": "모든 필수 항목을 선택해주세요"
     },
     "auth": {
         "email": "이메일",

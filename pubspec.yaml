@@ -30,6 +30,9 @@ dependencies:
   
   # Fonts (Pretendard 폰트를 Google Fonts에서 제공)
   google_fonts: ^6.2.1
+  firebase_vertexai: ^1.8.3
+  google_mobile_ads: ^7.0.0
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

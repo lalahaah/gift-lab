@@ -39,7 +39,7 @@ class HomePage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 헤더 영역
-                _buildHeader(context, isLoggedIn, remainingCount),
+                _buildHeader(context, ref, isLoggedIn, remainingCount),
                 const SizedBox(height: AppSpacing.xl),
 
                 // 메인 CTA 카드
@@ -59,15 +59,22 @@ class HomePage extends ConsumerWidget {
   /// 헤더 영역 (환영 메시지 + 무료 사용 카운터)
   Widget _buildHeader(
     BuildContext context,
+    WidgetRef ref,
     bool isLoggedIn,
     int remainingCount,
   ) {
+    final user = ref.watch(currentUserProvider);
+    final displayName =
+        user?.displayName ?? user?.email?.split('@')[0] ?? 'Explorer';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // 환영 메시지
         Text(
-          isLoggedIn ? 'home.welcome_user'.tr() : 'home.welcome_guest'.tr(),
+          isLoggedIn
+              ? 'home.welcome_user'.tr(namedArgs: {'name': displayName})
+              : 'home.welcome_guest'.tr(),
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             fontWeight: FontWeight.bold,
             color: AppColors.textBlack,

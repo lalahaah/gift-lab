@@ -12,6 +12,7 @@ import 'steps/step2_occasion_page.dart';
 import 'steps/step3_personality_page.dart';
 import 'steps/step4_budget_page.dart';
 import 'steps/step5_exclusions_page.dart';
+import 'loading_page.dart';
 
 /// 선물 분석 메인 플로우 페이지
 ///
@@ -67,30 +68,20 @@ class _GiftAnalysisFlowPageState extends ConsumerState<GiftAnalysisFlowPage> {
   }
 
   void _finishAnalysis() {
-    // TODO: 분석 요청 로직 구현
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('분석을 시작합니다...')));
-    // 임시로 결과 페이지로 이동 (나중에 로딩/광고 로직 추가 필요)
-    context.go('/results');
-  }
+    final state = ref.read(giftAnalysisProvider);
+    final request = state.toGiftRequest();
 
-  bool _isNextEnabled() {
-    final state = ref.watch(giftAnalysisProvider);
-    switch (_currentStep) {
-      case 1:
-        return state.isStep1Valid;
-      case 2:
-        return state.isStep2Valid;
-      case 3:
-        return state.isStep3Valid;
-      case 4:
-        return state.isStep4Valid;
-      case 5:
-        return state.isStep5Valid;
-      default:
-        return false;
+    if (request == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('필수 정보를 모두 입력해주세요.')));
+      return;
     }
+
+    // 로딩 페이지로 이동 (분석 및 광고 로드 시작)
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => LoadingPage(request: request)),
+    );
   }
 
   @override
@@ -173,7 +164,7 @@ class _GiftAnalysisFlowPageState extends ConsumerState<GiftAnalysisFlowPage> {
                 text: _currentStep == _totalSteps
                     ? '분석 시작하기'
                     : 'common.next'.tr(),
-                onPressed: _isNextEnabled() ? _nextStep : null,
+                onPressed: _nextStep,
               ),
             ),
           ),

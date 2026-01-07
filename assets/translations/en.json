@@ -61,7 +61,9 @@
         "loading": "Loading...",
         "error": "An error occurred",
         "retry": "Retry",
-        "success": "Success"
+        "success": "Success",
+        "next": "Next",
+        "required_fields": "Please select all required fields"
     },
     "auth": {
         "email": "Email",
