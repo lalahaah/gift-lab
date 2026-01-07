@@ -72,5 +72,18 @@
         "login_success": "Successfully signed in!",
         "logout_success": "Successfully signed out",
         "signup_success": "Sign up complete!"
+    },
+    "gift_analysis": {
+        "title": "Gift Analysis",
+        "step1_title": "Who is the gift for?",
+        "step1_subtitle": "Tell us about the recipient",
+        "step2_title": "What's the occasion?",
+        "step2_subtitle": "We recommend gifts for special days",
+        "step3_title": "What's their personality?",
+        "step3_subtitle": "MBTI or traits help accuracy",
+        "step4_title": "What's your budget?",
+        "step4_subtitle": "Set a comfortable price range",
+        "step5_title": "Any gifts to avoid?",
+        "step5_subtitle": "Let us know if there's anything they dislike or already have"
     }
 }

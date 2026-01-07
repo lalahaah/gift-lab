@@ -7,7 +7,6 @@ import '../../../core/constants/app_spacing.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../../providers/usage/usage_limit_provider.dart';
 import '../../widgets/buttons/primary_button.dart';
-import '../../widgets/buttons/secondary_button.dart';
 
 /// 홈 화면 - 선물 검색 시작 화면
 ///
@@ -189,13 +188,8 @@ class HomePage extends ConsumerWidget {
             text: 'home.start_analysis'.tr(),
             icon: Icons.auto_awesome,
             onPressed: () {
-              // TODO: 선물 분석 플로우 시작
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('common.loading'.tr()),
-                  duration: const Duration(seconds: 2),
-                ),
-              );
+              // 선물 분석 플로우 시작
+              context.push('/gift-analysis');
             },
           ),
         ],

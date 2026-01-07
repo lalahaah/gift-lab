@@ -5,6 +5,7 @@ import '../../presentation/pages/results/results_page.dart';
 import '../../presentation/pages/profile/profile_page.dart';
 import '../../presentation/pages/settings/settings_page.dart';
 import '../../presentation/pages/splash/splash_page.dart';
+import '../../presentation/pages/gift_analysis/gift_analysis_flow_page.dart';
 
 /// 기프트랩 앱의 GoRouter 설정
 ///
@@ -64,6 +65,12 @@ class AppRouter {
             ),
           ),
         ],
+      ),
+      // 선물 분석 플로우 (바텀 네비게이션 숨김)
+      GoRoute(
+        path: '/gift-analysis',
+        name: 'gift-analysis',
+        builder: (context, state) => const GiftAnalysisFlowPage(),
       ),
     ],
   );

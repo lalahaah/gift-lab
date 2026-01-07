@@ -48,11 +48,17 @@ class AppColors {
   static const Color kakaoYellow = Color(0xFFFEE500);
 
   // ===== Additional Neutral Shades =====
+  /// Gray 50 - Very Light Background
+  static const Color gray50 = Color(0xFFF9FAFB);
+
   /// Gray 100 - TextField 기본 배경
   static const Color gray100 = Color(0xFFF3F4F6);
 
   /// Gray 300 - Unselected Chip Border
   static const Color gray300 = Color(0xFFD1D5DB);
+
+  /// Gray 400 - Hint Text
+  static const Color gray400 = Color(0xFF9CA3AF);
 
   // ===== Utility Methods =====
 

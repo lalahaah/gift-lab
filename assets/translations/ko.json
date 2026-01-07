@@ -72,5 +72,18 @@
         "login_success": "로그인 성공!",
         "logout_success": "로그아웃되었습니다",
         "signup_success": "회원가입이 완료되었습니다!"
+    },
+    "gift_analysis": {
+        "title": "선물 분석",
+        "step1_title": "누구에게 선물하나요?",
+        "step1_subtitle": "받는 사람의 정보를 알려주세요",
+        "step2_title": "어떤 날인가요?",
+        "step2_subtitle": "특별한 날에 맞는 선물을 추천해드려요",
+        "step3_title": "그 사람은 어떤 성격인가요?",
+        "step3_subtitle": "MBTI나 성향을 알면 더 정확해져요",
+        "step4_title": "예산은 어느 정도인가요?",
+        "step4_subtitle": "부담 없는 가격대를 설정해주세요",
+        "step5_title": "피하고 싶은 선물이 있나요?",
+        "step5_subtitle": "이미 가지고 있거나 싫어하는 물건이 있다면 알려주세요"
     }
 }
