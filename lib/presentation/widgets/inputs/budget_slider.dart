@@ -44,6 +44,20 @@ class _BudgetSliderState extends State<BudgetSlider> {
     );
   }
 
+  @override
+  void didUpdateWidget(BudgetSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialMinBudget != oldWidget.initialMinBudget ||
+        widget.initialMaxBudget != oldWidget.initialMaxBudget) {
+      setState(() {
+        _currentRange = RangeValues(
+          widget.initialMinBudget.toDouble(),
+          widget.initialMaxBudget.toDouble(),
+        );
+      });
+    }
+  }
+
   /// 금액을 읽기 쉬운 형식으로 변환
   String _formatBudget(double value) {
     final intValue = value.toInt();

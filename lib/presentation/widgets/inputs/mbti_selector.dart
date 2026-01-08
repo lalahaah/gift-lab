@@ -45,12 +45,32 @@ class _MbtiSelectorState extends State<MbtiSelector> {
   void initState() {
     super.initState();
     _isUnknown = widget.initialUnknown;
+    _initValues();
+  }
 
+  @override
+  void didUpdateWidget(MbtiSelector oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialMbti != oldWidget.initialMbti ||
+        widget.initialUnknown != oldWidget.initialUnknown) {
+      setState(() {
+        _isUnknown = widget.initialUnknown;
+        _initValues();
+      });
+    }
+  }
+
+  void _initValues() {
     if (widget.initialMbti != null && widget.initialMbti!.length == 4) {
       _eOrI = widget.initialMbti![0] == 'E';
       _nOrS = widget.initialMbti![1] == 'N';
       _tOrF = widget.initialMbti![2] == 'T';
       _jOrP = widget.initialMbti![3] == 'J';
+    } else {
+      _eOrI = null;
+      _nOrS = null;
+      _tOrF = null;
+      _jOrP = null;
     }
   }
 

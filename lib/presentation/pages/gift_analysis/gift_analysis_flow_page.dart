@@ -101,9 +101,9 @@ class _GiftAnalysisFlowPageState extends ConsumerState<GiftAnalysisFlowPage> {
         actions: [
           TextButton(
             onPressed: () {
-              // 초기화 후 닫기
+              // 초기화 후 홈으로 이동
               ref.read(giftAnalysisProvider.notifier).reset();
-              context.pop();
+              context.go('/home');
             },
             child: Text(
               'common.close'.tr(),

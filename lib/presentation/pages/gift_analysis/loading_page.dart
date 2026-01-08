@@ -123,7 +123,10 @@ class _LoadingPageState extends ConsumerState<LoadingPage> {
   void _navigateToResult(List<GiftRecommendation> recommendations) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => ResultPage(recommendations: recommendations),
+        builder: (context) => ResultPage(
+          recommendations: recommendations,
+          request: widget.request,
+        ),
       ),
     );
   }

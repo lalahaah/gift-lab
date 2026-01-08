@@ -20,6 +20,8 @@ class AppRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/splash',
     routes: [
+      // 기본 경로 리다이렉트
+      GoRoute(path: '/', redirect: (context, state) => '/splash'),
       // 스플래시 페이지 (앱 시작 시 표시)
       GoRoute(
         path: '/splash',

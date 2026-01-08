@@ -5,7 +5,6 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
 import '../../../providers/auth/auth_provider.dart';
-import '../../../providers/usage/usage_limit_provider.dart';
 import '../../widgets/buttons/primary_button.dart';
 
 /// 홈 화면 - 선물 검색 시작 화면
@@ -18,7 +17,6 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isLoggedIn = ref.watch(isLoggedInProvider);
-    final remainingCount = ref.watch(remainingFreeCountProvider);
 
     return Scaffold(
       body: Container(
@@ -39,7 +37,7 @@ class HomePage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 헤더 영역
-                _buildHeader(context, ref, isLoggedIn, remainingCount),
+                _buildHeader(context, ref, isLoggedIn),
                 const SizedBox(height: AppSpacing.xl),
 
                 // 메인 CTA 카드
@@ -57,12 +55,7 @@ class HomePage extends ConsumerWidget {
   }
 
   /// 헤더 영역 (환영 메시지 + 무료 사용 카운터)
-  Widget _buildHeader(
-    BuildContext context,
-    WidgetRef ref,
-    bool isLoggedIn,
-    int remainingCount,
-  ) {
+  Widget _buildHeader(BuildContext context, WidgetRef ref, bool isLoggedIn) {
     final user = ref.watch(currentUserProvider);
     final displayName =
         user?.displayName ?? user?.email?.split('@')[0] ?? 'Explorer';
@@ -80,41 +73,6 @@ class HomePage extends ConsumerWidget {
             color: AppColors.textBlack,
           ),
         ),
-
-        // 게스트 사용자: 무료 사용 카운터
-        if (!isLoggedIn) ...[
-          const SizedBox(height: AppSpacing.xs),
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.m,
-              vertical: AppSpacing.s,
-            ),
-            decoration: BoxDecoration(
-              color: AppColors.mintSpark.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(
-                color: AppColors.mintSpark.withValues(alpha: 0.3),
-                width: 1,
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.stars, size: 16, color: AppColors.mintSpark),
-                const SizedBox(width: AppSpacing.xs),
-                Text(
-                  'home.free_analysis_left'.tr(
-                    namedArgs: {'count': remainingCount.toString()},
-                  ),
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppColors.mintSpark,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ],
     );
   }

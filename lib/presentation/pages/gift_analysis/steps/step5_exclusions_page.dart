@@ -8,16 +8,45 @@ import '../../../../providers/gift_analysis/gift_analysis_provider.dart';
 /// Step 5: 피하고 싶은 선물이 있나요?
 ///
 /// 제외하고 싶은 선물을 자유롭게 입력하는 페이지입니다.
-class Step5ExclusionsPage extends ConsumerWidget {
+class Step5ExclusionsPage extends ConsumerStatefulWidget {
   const Step5ExclusionsPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final notifier = ref.read(giftAnalysisProvider.notifier);
+  ConsumerState<Step5ExclusionsPage> createState() =>
+      _Step5ExclusionsPageState();
+}
 
-    // TextField 컨트롤러는 상태 유지를 위해 StatefulWidget을 사용하는 것이 일반적이지만,
-    // 간단한 구현을 위해 여기서는 생략하고 onChanged로 직접 업데이트합니다.
-    // 실제로는 TextEditingController를 사용하고 초기값을 설정해야 합니다.
+class _Step5ExclusionsPageState extends ConsumerState<Step5ExclusionsPage> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    final initialValue = ref.read(giftAnalysisProvider).exclusions ?? '';
+    _controller = TextEditingController(text: initialValue);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // 상태 변화 감시 (리셋 등 대응)
+    ref.listen(giftAnalysisProvider.select((s) => s.exclusions), (
+      previous,
+      next,
+    ) {
+      if (next == null || next.isEmpty) {
+        if (_controller.text.isNotEmpty) {
+          _controller.clear();
+        }
+      } else if (next != _controller.text) {
+        _controller.text = next;
+      }
+    });
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSpacing.l),
@@ -43,7 +72,7 @@ class Step5ExclusionsPage extends ConsumerWidget {
           const SizedBox(height: AppSpacing.xl),
 
           // 텍스트 입력 필드
-          _buildTextField(context, ref),
+          _buildTextField(context),
 
           const SizedBox(height: AppSpacing.m),
 
@@ -60,10 +89,7 @@ class Step5ExclusionsPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildTextField(BuildContext context, WidgetRef ref) {
-    // 초기값을 가져오기 위해 Consumer 사용
-    final initialValue = ref.watch(giftAnalysisProvider).exclusions;
-
+  Widget _buildTextField(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -77,7 +103,7 @@ class Step5ExclusionsPage extends ConsumerWidget {
         ],
       ),
       child: TextFormField(
-        initialValue: initialValue,
+        controller: _controller,
         onChanged: (value) {
           ref.read(giftAnalysisProvider.notifier).setExclusions(value);
         },

@@ -137,7 +137,11 @@ class GiftAnalysisNotifier extends StateNotifier<GiftAnalysisState> {
 
   /// Step 3: MBTI 설정
   void setMbti(String? mbti) {
-    state = state.copyWith(mbti: mbti, mbtiUnknown: false);
+    if (mbti != null) {
+      state = state.copyWith(mbti: mbti, mbtiUnknown: false);
+    } else {
+      state = state.copyWith(mbti: null);
+    }
   }
 
   /// Step 3: MBTI 모름 설정
