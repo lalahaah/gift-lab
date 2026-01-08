@@ -123,6 +123,70 @@ class FirestoreService {
       throw Exception('기념일 삭제 실패: $e');
     }
   }
+
+  // --- 저장한 선물 관련 메서드 ---
+
+  /// 선물 추천 결과 저장
+  Future<void> saveGiftRecommendation({
+    required String userId,
+    required String name,
+    required String priceRange,
+    required String reason,
+    required String imageUrl,
+    required String searchKeyword,
+    required String category,
+  }) async {
+    try {
+      await _db.collection('users').doc(userId).collection('saved_gifts').add({
+        'name': name,
+        'priceRange': priceRange,
+        'reason': reason,
+        'imageUrl': imageUrl,
+        'searchKeyword': searchKeyword,
+        'category': category,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception('선물 저장 실패: $e');
+    }
+  }
+
+  /// 저장한 선물 목록 조회
+  Stream<List<Map<String, dynamic>>> getSavedGiftsStream(String userId) {
+    return _db
+        .collection('users')
+        .doc(userId)
+        .collection('saved_gifts')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs.map((doc) {
+            final data = doc.data();
+            data['id'] = doc.id;
+            if (data['createdAt'] is Timestamp) {
+              data['createdAt'] = (data['createdAt'] as Timestamp).toDate();
+            }
+            return data;
+          }).toList();
+        });
+  }
+
+  /// 저장한 선물 삭제
+  Future<void> deleteSavedGift({
+    required String userId,
+    required String docId,
+  }) async {
+    try {
+      await _db
+          .collection('users')
+          .doc(userId)
+          .collection('saved_gifts')
+          .doc(docId)
+          .delete();
+    } catch (e) {
+      throw Exception('저장된 선물 삭제 실패: $e');
+    }
+  }
 }
 
 /// FirestoreService Provider

@@ -12,6 +12,7 @@ import '../../widgets/buttons/primary_button.dart';
 
 import '../../../core/domain/models/gift_request.dart';
 import '../../../core/services/gift_analysis_service.dart';
+import '../../../core/services/firestore_service.dart';
 
 /// 선물 분석 결과 페이지
 class ResultPage extends ConsumerStatefulWidget {
@@ -352,17 +353,87 @@ class _ResultPageState extends ConsumerState<ResultPage> {
             ),
           ),
 
-          // 쿠팡 버튼 영역
+          // 버튼 영역
           Container(
             color: AppColors.gray50,
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.l,
               vertical: AppSpacing.m,
             ),
-            child: PrimaryButton(
-              text: '쿠팡에서 최저가 찾기',
-              icon: Icons.search,
-              onPressed: () => _launchCoupangSearch(item.searchKeyword),
+            child: Row(
+              children: [
+                // 쿠팡 검색 버튼
+                Expanded(
+                  flex: 2,
+                  child: PrimaryButton(
+                    text: '쿠팡에서 최저가 찾기',
+                    icon: Icons.search,
+                    onPressed: () => _launchCoupangSearch(item.searchKeyword),
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.m),
+                // 저장하기 버튼
+                Expanded(
+                  flex: 1,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      final user = ref.read(currentUserProvider);
+                      // 비로그인 사용자 체크
+                      if (user == null) {
+                        _showLoginRequiredDialog();
+                        return;
+                      }
+
+                      try {
+                        await ref
+                            .read(firestoreServiceProvider)
+                            .saveGiftRecommendation(
+                              userId: user.uid,
+                              name: item.name,
+                              priceRange: item.priceRange,
+                              reason: item.reason,
+                              imageUrl: item.imageUrl,
+                              searchKeyword: item.searchKeyword,
+                              category: item.category,
+                            );
+
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('선물이 저장되었습니다! 🎁'),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        }
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('저장에 실패했습니다: $e')),
+                          );
+                        }
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.bookmark_border_rounded,
+                      color: AppColors.labIndigo,
+                    ),
+                    label: const Text(
+                      '저장',
+                      style: TextStyle(
+                        color: AppColors.labIndigo,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: AppColors.labIndigo),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

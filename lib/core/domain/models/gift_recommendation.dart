@@ -15,12 +15,16 @@ class GiftRecommendation {
   /// 대표 이미지 카테고리 (예: "diffuser", "wallet")
   final String imageUrl;
 
+  /// 선물 카테고리 (예: "생활용품", "패션")
+  final String category;
+
   GiftRecommendation({
     required this.name,
     required this.reason,
     required this.priceRange,
     required this.searchKeyword,
     required this.imageUrl,
+    this.category = '기타',
   });
 
   factory GiftRecommendation.fromJson(Map<String, dynamic> json) {
@@ -30,6 +34,7 @@ class GiftRecommendation {
       priceRange: json['price_range'] as String,
       searchKeyword: json['search_keyword'] as String,
       imageUrl: json['image_url'] ?? '',
+      category: json['category'] ?? '기타',
     );
   }
 }

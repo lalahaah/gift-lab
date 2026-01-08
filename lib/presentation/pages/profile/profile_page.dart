@@ -233,10 +233,7 @@ class ProfilePage extends ConsumerWidget {
             icon: Icons.favorite_border,
             title: '저장한 선물',
             onTap: () {
-              // TODO: 저장한 선물 페이지 이동
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('준비 중인 기능입니다')));
+              context.go('/profile/saved-gifts');
             },
           ),
           _buildMenuItem(

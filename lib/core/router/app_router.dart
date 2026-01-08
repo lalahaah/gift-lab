@@ -10,6 +10,7 @@ import '../../presentation/pages/auth/signup_page.dart';
 import '../../presentation/pages/gift_analysis/gift_analysis_flow_page.dart';
 import '../../presentation/pages/profile/analysis_history_page.dart';
 import '../../presentation/pages/profile/anniversary_page.dart';
+import '../../presentation/pages/profile/saved_gifts_page.dart';
 
 /// 기프트랩 앱의 GoRouter 설정
 ///
@@ -70,6 +71,11 @@ class AppRouter {
                 path: 'anniversary',
                 name: 'anniversary',
                 builder: (context, state) => const AnniversaryPage(),
+              ),
+              GoRoute(
+                path: 'saved-gifts',
+                name: 'saved-gifts',
+                builder: (context, state) => const SavedGiftsPage(),
               ),
             ],
           ),
