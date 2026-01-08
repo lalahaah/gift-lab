@@ -8,6 +8,8 @@ import '../../presentation/pages/splash/splash_page.dart';
 import '../../presentation/pages/auth/login_page.dart';
 import '../../presentation/pages/auth/signup_page.dart';
 import '../../presentation/pages/gift_analysis/gift_analysis_flow_page.dart';
+import '../../presentation/pages/profile/analysis_history_page.dart';
+import '../../presentation/pages/profile/anniversary_page.dart';
 
 /// 기프트랩 앱의 GoRouter 설정
 ///
@@ -58,6 +60,18 @@ class AppRouter {
               key: state.pageKey,
               child: const ProfilePage(),
             ),
+            routes: [
+              GoRoute(
+                path: 'history',
+                name: 'history',
+                builder: (context, state) => const AnalysisHistoryPage(),
+              ),
+              GoRoute(
+                path: 'anniversary',
+                name: 'anniversary',
+                builder: (context, state) => const AnniversaryPage(),
+              ),
+            ],
           ),
           // 설정 - 앱 설정 및 정보
           GoRoute(

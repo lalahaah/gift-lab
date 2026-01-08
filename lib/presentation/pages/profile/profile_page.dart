@@ -21,7 +21,6 @@ class ProfilePage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('프로필')),
       body: SafeArea(
-        // ignore: dead_code
         child: isLoggedIn
             ? _buildLoggedInView(context, ref)
             : _buildGuestView(context, ref),
@@ -226,10 +225,7 @@ class ProfilePage extends ConsumerWidget {
             icon: Icons.history,
             title: '분석 이력',
             onTap: () {
-              // TODO: 분석 이력 페이지 이동
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('준비 중인 기능입니다')));
+              context.go('/profile/history');
             },
           ),
           _buildMenuItem(
@@ -248,10 +244,7 @@ class ProfilePage extends ConsumerWidget {
             icon: Icons.cake_outlined,
             title: '기념일 관리',
             onTap: () {
-              // TODO: 기념일 관리 페이지 이동
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(const SnackBar(content: Text('준비 중인 기능입니다')));
+              context.go('/profile/anniversary');
             },
           ),
 

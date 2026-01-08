@@ -10,6 +10,8 @@ import '../../../core/domain/models/gift_request.dart';
 import '../../../core/domain/models/gift_recommendation.dart';
 import '../../../core/services/ad_service.dart';
 import '../../../core/services/gift_analysis_service.dart';
+import '../../../core/services/firestore_service.dart';
+import '../../../providers/auth/auth_provider.dart';
 import 'result_page.dart';
 
 /// 분석 진행 중 로딩 페이지
@@ -64,60 +66,91 @@ class _LoadingPageState extends ConsumerState<LoadingPage> {
     final analysisService = ref.read(giftAnalysisServiceProvider);
 
     try {
-      // 1. 광고 로드 시작 (비동기, 기다리지 않음)
+      // 1. 광고 로드 시작 (비동기)
       final adLoadFuture = adService.loadInterstitialAd();
 
-      // 2. 최소 로딩 시간 (애니메이션 효과)
+      // 2. 최소 로딩 시간 (3초)
       final minTimeFuture = Future.delayed(const Duration(seconds: 3));
 
-      // 3. AI 분석 요청
-      final analysisFuture = analysisService.getRecommendations(widget.request);
+      // 3. AI 분석 요청 (15초 타임아웃 추가)
+      final analysisFuture = analysisService
+          .getRecommendations(widget.request)
+          .timeout(
+            const Duration(seconds: 15),
+            onTimeout: () {
+              throw TimeoutException('AI 분석 시간이 초과되었습니다. 다시 시도해주세요.');
+            },
+          );
 
-      // 4. 모든 작업 병렬 대기 (광고 로드는 선택적이지만 여기선 편의상 같이 대기하거나, 타임아웃 둠)
-      // 실제 UX: 분석이 빨리 끝나도 최소 3초는 보여줌.
-      // 광고가 안 뜨더라도 분석 결과는 보여줘야 함.
+      debugPrint('분석 프로세스 시작...');
+
+      // 4. 병렬 대기
       final results = await Future.wait([
         minTimeFuture,
         analysisFuture,
-        // 광고 로드는 오래 걸리면 건너뛰기 위해 별도로 await하지 않고,
-        // 분석 완료 시점에 로드 상태를 체크하는 게 낫지만,
-        // 여기서는 간단히 분석 완료될 때까지 광고도 최대한 로드 기다림.
+        // 광고 로드는 오래 걸리면 건너뛰기
         adLoadFuture.timeout(const Duration(seconds: 5), onTimeout: () {}),
       ]);
 
       final recommendations = results[1] as List<GiftRecommendation>;
+      debugPrint('AI 분석 완료: ${recommendations.length}개 추천됨');
+
+      // 선물 추천 이력 저장 (비차단 방식으로 변경하여 UI 지연 방지)
+      _saveHistoryInBackground(recommendations);
 
       if (!mounted) return;
 
       // 5. 광고 표시 시도
-      final adShown = adService.showInterstitialAd();
-      debugPrint('Ad shown: $adShown');
+      adService.showInterstitialAd();
 
-      // 6. 결과 페이지로 이동 (광고가 닫힌 후 이동은 AdService 콜백에서 처리해야 정확하지만,
-      // 현재 구조상 광고가 모달로 뜨므로, 광고 표시 호출 직후 이동하면 광고 뒤에 결과 페이지가 깔림.
-      // 전면 광고는 닫힐 때까지 await할 수 없으므로(show는 void/bool),
-      // 보통은 화면 전환을 먼저 하고 광고를 띄우거나,
-      // 현재 페이지에서 광고를 띄우고 닫히면 이동함.
-      // 여기서는 "현재 페이지 유지 -> 광고 뜸 -> 광고 닫힘 -> 결과 페이지 이동" 흐름이 자연스러움.
-      // 하지만 AdService의 콜백을 여기서 알 수 없으므로,
-      // AdService를 수정하거나, 아니면 "결과 페이지로 먼저 이동하고 거기서 광고를 띄우는" 방식이 더 쉬움.
-      // 또는 간단히: 광고가 표시되었으면 약간의 딜레이 후 이동(광고가 덮음), 아니면 즉시 이동.
-
-      // 수정된 Plan: 결과 페이지로 이동하면서 결과를 넘겨줌.
-      // 결과 페이지의 initState에서 광고를 띄우는 게 나을 수도?
-      // 아니면 여기서 이동.
-
-      // 여기서는 이동합니다. 광고가 떴다면 광고가 위에 덮일 것입니다.
+      // 6. 결과 페이지로 이동
       _navigateToResult(recommendations);
     } catch (e) {
-      // 에러 처리
+      debugPrint('분석 중 에러 발생: $e');
       if (mounted) {
+        String message = '오류가 발생했습니다. 다시 시도해주세요.';
+        if (e is TimeoutException) {
+          message = '연결 상태가 불안정하여 AI 분석이 중단되었습니다.';
+        }
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text('오류가 발생했습니다: $e')));
+        ).showSnackBar(SnackBar(content: Text(message)));
         context.pop(); // 이전 화면으로 복귀
       }
     }
+  }
+
+  /// 백그라운드에서 히스토리 저장 (실패해도 흐름에 지장 없음)
+  void _saveHistoryInBackground(List<GiftRecommendation> recommendations) {
+    final user = ref.read(currentUserProvider);
+    if (user == null) return;
+
+    ref
+        .read(firestoreServiceProvider)
+        .saveGiftHistory(
+          userId: user.uid,
+          giftData: {
+            'relation': widget.request.relation,
+            'occasion': widget.request.occasion,
+            'ageGroup': widget.request.ageGroup,
+            'gender': widget.request.gender,
+            'mbti': widget.request.mbti,
+            'recommendations': recommendations
+                .map(
+                  (r) => {
+                    'name': r.name,
+                    'reason': r.reason,
+                    'price_range': r.priceRange,
+                    'image_url': r.imageUrl,
+                    'search_keyword': r.searchKeyword,
+                  },
+                )
+                .toList(),
+          },
+        )
+        .catchError((e) {
+          debugPrint('이력 백그라운드 저장 실패: $e');
+        });
   }
 
   void _navigateToResult(List<GiftRecommendation> recommendations) {

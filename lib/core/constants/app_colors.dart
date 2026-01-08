@@ -47,6 +47,10 @@ class AppColors {
   /// 사용: 카카오 공유 버튼 전용
   static const Color kakaoYellow = Color(0xFFFEE500);
 
+  /// Lab Pink
+  /// 사용: 기념일 등 따뜻한 강조
+  static const Color labPink = Color(0xFFEC4899);
+
   // ===== Additional Neutral Shades =====
   /// Gray 50 - Very Light Background
   static const Color gray50 = Color(0xFFF9FAFB);
