@@ -127,7 +127,7 @@ class _SplashPageState extends State<SplashPage>
                 const SizedBox(height: 8),
                 // 부제
                 Text(
-                  '완벽한 선물을 찾아드립니다',
+                  '취향 분석 기반, 실패 없는 선물연구소',
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.white.withValues(alpha: 0.9),

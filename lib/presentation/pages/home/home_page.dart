@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
+import 'dart:io';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../widgets/buttons/primary_button.dart';
 
@@ -11,11 +13,54 @@ import '../../widgets/buttons/primary_button.dart';
 ///
 /// 사용자가 선물 분석을 시작할 수 있는
 /// 앱의 메인 진입점입니다.
-class HomePage extends ConsumerWidget {
+class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends ConsumerState<HomePage> {
+  BannerAd? _bannerAd;
+  bool _isBannerAdLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadBannerAd();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+
+  void _loadBannerAd() {
+    final adUnitId = Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/6300978111' // 테스트 banner ID
+        : 'ca-app-pub-3940256099942544/2934735716';
+
+    _bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isBannerAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final isLoggedIn = ref.watch(isLoggedInProvider);
 
     return Scaffold(
@@ -44,13 +89,30 @@ class HomePage extends ConsumerWidget {
                 _buildMainCard(context),
                 const SizedBox(height: AppSpacing.l),
 
-                // 빠른 액세스 영역
-                _buildQuickAccess(context, isLoggedIn),
+                // 빠른 액세스 영역 (로그인 시에만 표시)
+                if (isLoggedIn) ...[
+                  _buildQuickAccess(context, isLoggedIn),
+                  const SizedBox(height: AppSpacing.l),
+                ],
+
+                // 하단 광고 영역
+                _buildBannerAd(),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildBannerAd() {
+    if (!_isBannerAdLoaded || _bannerAd == null) return const SizedBox.shrink();
+
+    return Container(
+      alignment: Alignment.center,
+      width: _bannerAd!.size.width.toDouble(),
+      height: _bannerAd!.size.height.toDouble(),
+      child: AdWidget(ad: _bannerAd!),
     );
   }
 
