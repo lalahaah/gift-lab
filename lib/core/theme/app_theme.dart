@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'light_theme.dart';
+import 'dark_theme.dart';
 
 /// 기프트랩 디자인 시스템 - Theme Manager
 ///
@@ -12,15 +13,16 @@ class AppTheme {
   /// Light Theme
   static ThemeData get lightTheme => AppLightTheme.theme;
 
-  /// 현재는 Dark Theme 미지원
-  /// 추후 확장 가능
-  // static ThemeData get darkTheme => AppDarkTheme.theme;
+  /// Dark Theme
+  static ThemeData get darkTheme => AppDarkTheme.theme;
 
   /// 테마 초기화
-  ///
-  /// 앱 시작 시 상태바/네비게이션바 스타일 설정
-  static void initialize() {
-    SystemChrome.setSystemUIOverlayStyle(AppLightTheme.systemUiOverlayStyle);
+  static void initialize(ThemeMode mode) {
+    if (mode == ThemeMode.dark) {
+      SystemChrome.setSystemUIOverlayStyle(AppDarkTheme.systemUiOverlayStyle);
+    } else {
+      SystemChrome.setSystemUIOverlayStyle(AppLightTheme.systemUiOverlayStyle);
+    }
   }
 
   /// 테마 모드 (현재는 Light만 지원)

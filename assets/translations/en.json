@@ -5,7 +5,7 @@
     },
     "navigation": {
         "home": "Home",
-        "results": "Results",
+        "stories": "Gift Stories",
         "profile": "Profile",
         "settings": "Settings"
     },
@@ -32,16 +32,40 @@
         "signup": "Sign Up",
         "logout": "Sign Out"
     },
-    "results": {
-        "title": "Analysis Results",
-        "empty_title": "No analysis results yet",
-        "empty_description": "Start a gift analysis from the home screen!"
+    "stories": {
+        "title": "Gift Stories",
+        "empty_title": "No stories shared yet",
+        "empty_description": "Be the first to share your gift story!",
+        "create_post": "Create Story",
+        "post_title": "Title",
+        "post_title_hint": "Enter the name or title of your gift",
+        "post_content": "Content",
+        "post_content_hint": "Tell us about your gift story",
+        "add_photo": "Add Photo",
+        "photo_required": "Please add a photo of the gift",
+        "tags_hint": "Tags (optional)",
+        "post_success": "Your story has been shared!",
+        "delete_confirm": "Are you sure you want to delete this story?",
+        "delete_success": "Story has been deleted",
+        "login_required": "Login required for this feature",
+        "likes": "Likes",
+        "sort_latest": "Latest",
+        "sort_popular": "Popular",
+        "just_now": "Just now",
+        "minutes_ago": "{{count}}m ago",
+        "hours_ago": "{{count}}h ago",
+        "days_ago": "{{count}}d ago"
     },
     "settings": {
         "title": "Settings",
         "app_info": "App Information",
         "version": "Version",
         "language": "Language",
+        "theme": "Theme Settings",
+        "theme_mode": "Select Theme Mode",
+        "theme_light": "Light Mode",
+        "theme_dark": "Dark Mode",
+        "theme_system": "System Settings",
         "legal": "Terms and Policies",
         "terms": "Terms of Service",
         "privacy": "Privacy Policy",

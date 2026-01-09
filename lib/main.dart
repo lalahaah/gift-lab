@@ -6,6 +6,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'firebase_options.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
+import 'providers/theme/theme_provider.dart';
 
 Future<void> main() async {
   // Flutter 바인딩 초기화
@@ -19,9 +20,6 @@ Future<void> main() async {
 
   // AdMob 초기화
   MobileAds.instance.initialize();
-
-  // 테마 초기화 (상태바/네비게이션바 스타일 설정)
-  AppTheme.initialize();
 
   runApp(
     // EasyLocalization으로 앱 래핑
@@ -38,26 +36,30 @@ Future<void> main() async {
   );
 }
 
-class GiftLabApp extends StatelessWidget {
+class GiftLabApp extends ConsumerWidget {
   const GiftLabApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'app.name'.tr(), // 다국어 지원
-      debugShowCheckedModeBanner: false,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeModeProvider);
 
-      // EasyLocalization 설정
+    // 테마 초기화 (상태바/네비게이션바 스타일 설정)
+    AppTheme.initialize(themeMode);
+
+    return MaterialApp.router(
+      title: 'app.title'.tr(),
+      debugShowCheckedModeBanner: false,
+      routerConfig: AppRouter.router,
+
+      // 테마 설정
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: themeMode,
+
+      // 지역 설장
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
       locale: context.locale,
-
-      // 디자인 시스템 테마 적용
-      theme: AppTheme.lightTheme,
-      themeMode: AppTheme.themeMode,
-
-      // GoRouter 설정
-      routerConfig: AppRouter.router,
     );
   }
 }

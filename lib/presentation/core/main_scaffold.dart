@@ -15,7 +15,7 @@ class MainScaffold extends StatelessWidget {
     int getCurrentIndex() {
       final String location = GoRouterState.of(context).uri.path;
       if (location.startsWith('/home')) return 0;
-      if (location.startsWith('/results')) return 1;
+      if (location.startsWith('/stories')) return 1;
       if (location.startsWith('/profile')) return 2;
       if (location.startsWith('/settings')) return 3;
       return 0; // 기본값: 홈
@@ -28,7 +28,7 @@ class MainScaffold extends StatelessWidget {
           context.go('/home');
           break;
         case 1:
-          context.go('/results');
+          context.go('/stories');
           break;
         case 2:
           context.go('/profile');
@@ -52,9 +52,9 @@ class MainScaffold extends StatelessWidget {
             label: 'navigation.home'.tr(),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.analytics_outlined),
-            activeIcon: const Icon(Icons.analytics),
-            label: 'navigation.results'.tr(),
+            icon: const Icon(Icons.auto_stories_outlined),
+            activeIcon: const Icon(Icons.auto_stories),
+            label: 'navigation.stories'.tr(),
           ),
           BottomNavigationBarItem(
             icon: const Icon(Icons.person_outline),

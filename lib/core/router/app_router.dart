@@ -1,7 +1,8 @@
 import 'package:go_router/go_router.dart';
 import '../../presentation/core/main_scaffold.dart';
 import '../../presentation/pages/home/home_page.dart';
-import '../../presentation/pages/results/results_page.dart';
+import '../../presentation/pages/stories/gift_stories_page.dart';
+import '../../presentation/pages/stories/create_gift_post_page.dart';
 import '../../presentation/pages/profile/profile_page.dart';
 import '../../presentation/pages/settings/settings_page.dart';
 import '../../presentation/pages/splash/splash_page.dart';
@@ -45,14 +46,21 @@ class AppRouter {
             pageBuilder: (context, state) =>
                 NoTransitionPage(key: state.pageKey, child: const HomePage()),
           ),
-          // 결과 - AI 추천 결과 리스트
+          // 선물 이야기 - 사용자 포스트 커뮤니티
           GoRoute(
-            path: '/results',
-            name: 'results',
+            path: '/stories',
+            name: 'stories',
             pageBuilder: (context, state) => NoTransitionPage(
               key: state.pageKey,
-              child: const ResultsPage(),
+              child: const GiftStoriesPage(),
             ),
+            routes: [
+              GoRoute(
+                path: 'create',
+                name: 'create-post',
+                builder: (context, state) => const CreateGiftPostPage(),
+              ),
+            ],
           ),
           // 프로필 - 사용자 정보 및 분석 이력
           GoRoute(

@@ -134,7 +134,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             'home.welcome_guest'.tr(),
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.textBlack,
+              color: Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ],
@@ -161,7 +161,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               'home.welcome_user'.tr(namedArgs: {'name': displayName}),
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: AppColors.textBlack,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ],
@@ -175,10 +175,10 @@ class _HomePageState extends ConsumerState<HomePage> {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.xl),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.7),
+        color: Theme.of(context).colorScheme.surface.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.8),
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.5),
           width: 1.5,
         ),
         boxShadow: [
@@ -223,7 +223,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             'home.main_message'.tr(),
             style: Theme.of(context).textTheme.headlineMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.textBlack,
               height: 1.3,
             ),
             textAlign: TextAlign.center,
@@ -233,8 +232,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           // 서브 메시지
           Text(
             'home.subtitle_guest'.tr(),
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: AppColors.textGray,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
               height: 1.5,
             ),
             textAlign: TextAlign.center,
@@ -273,7 +272,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           '나의 기념일',
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppColors.textBlack,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: AppSpacing.m),
@@ -301,9 +300,12 @@ class _HomePageState extends ConsumerState<HomePage> {
 
             return Container(
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Theme.of(context).cardTheme.color,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.gray100),
+                border: Border.all(
+                  color:
+                      Theme.of(context).dividerTheme.color ?? AppColors.gray100,
+                ),
               ),
               padding: const EdgeInsets.all(8),
               child: TableCalendar(
@@ -413,7 +415,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           'home.quick_access'.tr(),
           style: Theme.of(context).textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppColors.textBlack,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: AppSpacing.m),
@@ -444,9 +446,12 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Container(
         padding: const EdgeInsets.all(AppSpacing.l),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardTheme.color,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.gray100, width: 1),
+          border: Border.all(
+            color: Theme.of(context).dividerTheme.color ?? AppColors.gray100,
+            width: 1,
+          ),
         ),
         child: Row(
           children: [
@@ -468,22 +473,25 @@ class _HomePageState extends ConsumerState<HomePage> {
                     title,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textBlack,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.bodySmall?.copyWith(color: AppColors.textGray),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right, color: AppColors.textGray),
+            Icon(
+              Icons.chevron_right,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
           ],
         ),
       ),

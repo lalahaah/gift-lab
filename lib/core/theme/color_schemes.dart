@@ -40,6 +40,25 @@ class AppColorSchemes {
     brightness: Brightness.light,
   );
 
+  /// Dark ColorScheme
+  static final ColorScheme darkColorScheme = ColorScheme.dark(
+    primary: AppColors.labIndigo,
+    onPrimary: AppColors.pureWhite,
+    primaryContainer: AppColors.labIndigo.withValues(alpha: 0.2),
+    onPrimaryContainer: AppColors.labIndigoLighten(0.3),
+    secondary: AppColors.mintSpark,
+    onSecondary: AppColors.pureWhite,
+    secondaryContainer: AppColors.mintSpark.withValues(alpha: 0.2),
+    onSecondaryContainer: AppColors.mintSparkLighten(0.3),
+    error: AppColors.errorRed,
+    onError: AppColors.pureWhite,
+    surface: const Color(0xFF1F2937),
+    onSurface: Colors.white,
+    surfaceContainerHighest: const Color(0xFF111827),
+    outline: const Color(0xFF374151),
+    brightness: Brightness.dark,
+  );
+
   /// ColorScheme에서 자주 사용하는 색상들에 대한 편의 메서드
 
   /// 텍스트 기본 색상 (제목)

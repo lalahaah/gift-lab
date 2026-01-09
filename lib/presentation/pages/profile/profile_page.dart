@@ -64,9 +64,9 @@ class ProfilePage extends ConsumerWidget {
             const SizedBox(height: 8),
             Text(
               'profile.guest_description'.tr(),
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: AppColors.textGray),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 32),

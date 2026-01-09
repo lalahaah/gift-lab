@@ -5,7 +5,7 @@
     },
     "navigation": {
         "home": "홈",
-        "results": "결과",
+        "stories": "선물 이야기",
         "profile": "프로필",
         "settings": "설정"
     },
@@ -34,16 +34,40 @@
         "signup": "회원가입",
         "logout": "로그아웃"
     },
-    "results": {
-        "title": "분석 결과",
-        "empty_title": "아직 분석 결과가 없어요",
-        "empty_description": "홈 화면에서 선물 분석을 시작해보세요!"
+    "stories": {
+        "title": "선물 이야기",
+        "empty_title": "아직 공유된 이야기가 없어요",
+        "empty_description": "첫 번째 선물 이야기의 주인공이 되어보세요!",
+        "create_post": "이야기 작성",
+        "post_title": "제목",
+        "post_title_hint": "선물의 이름이나 제목을 입력하세요",
+        "post_content": "내용",
+        "post_content_hint": "선물에 대한 이야기를 들려주세요",
+        "add_photo": "사진 추가",
+        "photo_required": "선물 사진을 추가해주세요",
+        "tags_hint": "태그 (선택사항)",
+        "post_success": "이야기가 공유되었습니다!",
+        "delete_confirm": "이 이야기를 삭제하시겠습니까?",
+        "delete_success": "이야기가 삭제되었습니다",
+        "login_required": "로그인이 필요한 기능입니다",
+        "likes": "좋아요",
+        "sort_latest": "최신순",
+        "sort_popular": "인기순",
+        "just_now": "방금 전",
+        "minutes_ago": "{{count}}분 전",
+        "hours_ago": "{{count}}시간 전",
+        "days_ago": "{{count}}일 전"
     },
     "settings": {
         "title": "설정",
         "app_info": "앱 정보",
         "version": "버전 정보",
         "language": "언어 설정",
+        "theme": "테마 설정",
+        "theme_mode": "테마 모드 선택",
+        "theme_light": "라이트 모드",
+        "theme_dark": "다크 모드",
+        "theme_system": "시스템 설정",
         "legal": "약관 및 정책",
         "terms": "이용약관",
         "privacy": "개인정보처리방침",

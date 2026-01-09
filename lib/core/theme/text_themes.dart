@@ -73,6 +73,59 @@ class AppTextThemes {
     );
   }
 
+  /// Dark TextTheme
+  static TextTheme get darkTextTheme {
+    return GoogleFonts.notoSansKrTextTheme(
+      TextTheme(
+        // Display Styles
+        displayLarge: AppTypography.displayH1.copyWith(color: Colors.white),
+        displayMedium: AppTypography.displayH2.copyWith(color: Colors.white),
+        displaySmall: AppTypography.displayH2.copyWith(
+          fontSize: 18.0,
+          color: Colors.white,
+        ),
+
+        // Headline Styles
+        headlineLarge: AppTypography.displayH1.copyWith(color: Colors.white),
+        headlineMedium: AppTypography.displayH2.copyWith(color: Colors.white),
+        headlineSmall: AppTypography.body1.copyWith(
+          fontSize: 18.0,
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+
+        // Title Styles
+        titleLarge: AppTypography.displayH2.copyWith(color: Colors.white),
+        titleMedium: AppTypography.body1.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        titleSmall: AppTypography.body2.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+
+        // Body Styles
+        bodyLarge: AppTypography.body1.copyWith(color: Colors.white),
+        bodyMedium: AppTypography.body2.copyWith(color: Colors.white),
+        bodySmall: AppTypography.caption.copyWith(
+          color: Colors.white.withValues(alpha: 0.7),
+        ),
+
+        // Label Styles
+        labelLarge: AppTypography.button.copyWith(color: Colors.white),
+        labelMedium: AppTypography.body2.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Colors.white,
+        ),
+        labelSmall: AppTypography.caption.copyWith(
+          fontWeight: FontWeight.w600,
+          color: Colors.white.withValues(alpha: 0.7),
+        ),
+      ),
+    );
+  }
+
   /// Material Design 3 텍스트 역할별 스타일 가이드
   ///
   /// - displayLarge/Medium/Small: 큰 헤드라인, 히어로 텍스트
