@@ -171,7 +171,6 @@ class FirestoreService {
         });
   }
 
-  /// 저장한 선물 삭제
   Future<void> deleteSavedGift({
     required String userId,
     required String docId,
@@ -186,6 +185,49 @@ class FirestoreService {
     } catch (e) {
       throw Exception('저장된 선물 삭제 실패: $e');
     }
+  }
+
+  // --- 사용자 프로필 관련 메서드 ---
+
+  /// 사용자 프로필 업데이트
+  ///
+  /// [userId] 사용자 ID
+  /// [displayName] 닉네임 (선택)
+  /// [bio] 자기소개 (선택)
+  /// [photoUrl] 프로필 이미지 URL (선택)
+  Future<void> updateUserProfile(
+    String userId, {
+    String? displayName,
+    String? bio,
+    String? photoUrl,
+  }) async {
+    try {
+      final updates = <String, dynamic>{
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+
+      if (displayName != null) updates['displayName'] = displayName;
+      if (bio != null) updates['bio'] = bio;
+      if (photoUrl != null) updates['photoUrl'] = photoUrl;
+
+      // merge: true 옵션으로 문서가 없으면 생성하고 있으면 병합
+      await _db
+          .collection('users')
+          .doc(userId)
+          .set(updates, SetOptions(merge: true));
+    } catch (e) {
+      throw Exception('프로필 업데이트 실패: $e');
+    }
+  }
+
+  /// 사용자 프로필 스트림 조회
+  Stream<Map<String, dynamic>?> getUserProfileStream(String userId) {
+    return _db.collection('users').doc(userId).snapshots().map((snapshot) {
+      if (snapshot.exists) {
+        return snapshot.data();
+      }
+      return null;
+    });
   }
 }
 

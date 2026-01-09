@@ -76,7 +76,12 @@
         "login_success": "로그인 성공!",
         "logout": "로그아웃",
         "logout_success": "로그아웃되었습니다",
-        "signup_success": "회원가입이 완료되었습니다!"
+        "signup_success": "회원가입이 완료되었습니다!",
+        "nickname": "닉네임",
+        "bio": "한줄 소개 (선택)",
+        "nickname_hint": "활동할 닉네임을 입력해주세요",
+        "bio_hint": "자신을 소개하는 한줄을 입력해주세요",
+        "nickname_required": "닉네임은 필수입니다"
     },
     "gift_analysis": {
         "title": "선물 분석",

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/services/firestore_service.dart';
 import '../../../providers/auth/auth_provider.dart';
 
 /// 프로필 페이지
@@ -158,124 +159,180 @@ class ProfilePage extends ConsumerWidget {
   Widget _buildLoggedInView(BuildContext context, WidgetRef ref) {
     final user = ref.watch(currentUserProvider);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // 사용자 정보 카드
-          Container(
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundColor: Theme.of(
-                    context,
-                  ).colorScheme.primaryContainer,
-                  child: Text(
-                    user?.email?.substring(0, 1).toUpperCase() ?? 'U',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+    final firestoreService = ref.watch(firestoreServiceProvider);
+
+    return StreamBuilder<Map<String, dynamic>?>(
+      stream: firestoreService.getUserProfileStream(user!.uid),
+      builder: (context, snapshot) {
+        final profileData = snapshot.data;
+        final displayName =
+            profileData?['displayName'] ?? user.displayName ?? '사용자';
+        final photoUrl = profileData?['photoUrl'] ?? user.photoURL;
+        final bio = profileData?['bio'] as String?;
+
+        return SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // 사용자 정보 카드
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
                     ),
-                  ),
+                  ],
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        user?.displayName ?? '사용자',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                child: Row(
+                  children: [
+                    // 프로필 이미지
+                    Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Theme.of(context).colorScheme.primaryContainer,
+                        image: photoUrl != null
+                            ? DecorationImage(
+                                image: NetworkImage(photoUrl),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        user?.email ?? '',
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
+                      child: photoUrl == null
+                          ? Center(
+                              child: Text(
+                                displayName.isNotEmpty
+                                    ? displayName.substring(0, 1).toUpperCase()
+                                    : 'U',
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryContainer,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    const SizedBox(width: 16),
+
+                    // 이름 및 소개
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  displayName,
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              const SizedBox(width: 4),
+                              // 프로필 수정 버튼 (아이콘)
+                              InkWell(
+                                onTap: () => context.push('/profile/edit'),
+                                borderRadius: BorderRadius.circular(12),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Icon(
+                                    Icons.edit_outlined,
+                                    size: 16,
+                                    color: AppColors.textGray,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            bio ?? user.email ?? '',
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 32),
-
-          // 메뉴 리스트
-          _buildMenuItem(
-            context,
-            icon: Icons.history,
-            title: '분석 이력',
-            onTap: () {
-              context.go('/profile/history');
-            },
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.favorite_border,
-            title: '저장한 선물',
-            onTap: () {
-              context.go('/profile/saved-gifts');
-            },
-          ),
-          _buildMenuItem(
-            context,
-            icon: Icons.cake_outlined,
-            title: '기념일 관리',
-            onTap: () {
-              context.go('/profile/anniversary');
-            },
-          ),
-
-          const SizedBox(height: 32),
-
-          // 로그아웃 버튼
-          OutlinedButton.icon(
-            onPressed: () async {
-              try {
-                await ref.read(authServiceProvider).signOut();
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('auth.logout_success'.tr())),
-                  );
-                }
-              } catch (e) {
-                if (context.mounted) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(e.toString())));
-                }
-              }
-            },
-            icon: const Icon(Icons.logout),
-            label: Text('auth.logout'.tr()), // '로그아웃'
-            style: OutlinedButton.styleFrom(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              side: BorderSide(
-                color: Theme.of(context).colorScheme.outlineVariant,
               ),
-            ),
+
+              const SizedBox(height: 32),
+
+              // 메뉴 리스트
+              _buildMenuItem(
+                context,
+                icon: Icons.history,
+                title: '분석 이력',
+                onTap: () {
+                  context.go('/profile/history');
+                },
+              ),
+              _buildMenuItem(
+                context,
+                icon: Icons.favorite_border,
+                title: '저장한 선물',
+                onTap: () {
+                  context.go('/profile/saved-gifts');
+                },
+              ),
+              _buildMenuItem(
+                context,
+                icon: Icons.cake_outlined,
+                title: '기념일 관리',
+                onTap: () {
+                  context.go('/profile/anniversary');
+                },
+              ),
+
+              const SizedBox(height: 32),
+
+              // 로그아웃 버튼
+              OutlinedButton.icon(
+                onPressed: () async {
+                  try {
+                    await ref.read(authServiceProvider).signOut();
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('auth.logout_success'.tr())),
+                      );
+                    }
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(e.toString())));
+                    }
+                  }
+                },
+                icon: const Icon(Icons.logout),
+                label: Text('auth.logout'.tr()), // '로그아웃'
+                style: OutlinedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  side: BorderSide(
+                    color: Theme.of(context).colorScheme.outlineVariant,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 

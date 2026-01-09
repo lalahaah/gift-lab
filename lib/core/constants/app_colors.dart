@@ -58,6 +58,9 @@ class AppColors {
   /// Gray 100 - TextField 기본 배경
   static const Color gray100 = Color(0xFFF3F4F6);
 
+  /// Gray 200 - Borders, Dividers
+  static const Color gray200 = Color(0xFFE5E7EB);
+
   /// Gray 300 - Unselected Chip Border
   static const Color gray300 = Color(0xFFD1D5DB);
 

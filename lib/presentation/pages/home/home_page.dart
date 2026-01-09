@@ -126,24 +126,47 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   /// 헤더 영역 (환영 메시지 + 무료 사용 카운터)
   Widget _buildHeader(BuildContext context, WidgetRef ref, bool isLoggedIn) {
-    final user = ref.watch(currentUserProvider);
-    final displayName =
-        user?.displayName ?? user?.email?.split('@')[0] ?? 'Explorer';
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 환영 메시지
-        Text(
-          isLoggedIn
-              ? 'home.welcome_user'.tr(namedArgs: {'name': displayName})
-              : 'home.welcome_guest'.tr(),
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-            color: AppColors.textBlack,
+    if (!isLoggedIn) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'home.welcome_guest'.tr(),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.textBlack,
+            ),
           ),
-        ),
-      ],
+        ],
+      );
+    }
+
+    final user = ref.watch(currentUserProvider);
+    final firestoreService = ref.watch(firestoreServiceProvider);
+
+    return StreamBuilder<Map<String, dynamic>?>(
+      stream: firestoreService.getUserProfileStream(user!.uid),
+      builder: (context, snapshot) {
+        final profileData = snapshot.data;
+        final displayName =
+            profileData?['displayName'] ??
+            user.displayName ??
+            user.email?.split('@')[0] ??
+            'Explorer';
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'home.welcome_user'.tr(namedArgs: {'name': displayName}),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.textBlack,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

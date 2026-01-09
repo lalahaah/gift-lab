@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_spacing.dart';
+import '../../../core/services/firestore_service.dart';
 import '../../../providers/auth/auth_provider.dart';
 import '../../widgets/buttons/primary_button.dart';
 
@@ -20,6 +21,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _nicknameController = TextEditingController();
+  final _bioController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -29,6 +32,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _nicknameController.dispose();
+    _bioController.dispose();
     super.dispose();
   }
 
@@ -42,10 +47,28 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
     try {
       final authService = ref.read(authServiceProvider);
-      await authService.signUpWithEmail(
+      final firestoreService = ref.read(firestoreServiceProvider);
+
+      final userCredential = await authService.signUpWithEmail(
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+
+      // Firestore에 사용자 프로필 추가 정보 저장
+      if (userCredential.user != null) {
+        await firestoreService.updateUserProfile(
+          userCredential.user!.uid,
+          displayName: _nicknameController.text.trim(),
+          bio: _bioController.text.trim().isEmpty
+              ? null
+              : _bioController.text.trim(),
+        );
+
+        // Firebase Auth의 displayName도 업데이트 (선택사항, 일관성을 위해)
+        await userCredential.user!.updateDisplayName(
+          _nicknameController.text.trim(),
+        );
+      }
 
       if (mounted) {
         // 회원가입 성공 시 (자동 로그인됨)
@@ -133,6 +156,56 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                     }
                     return null;
                   },
+                ),
+                const SizedBox(height: AppSpacing.l),
+
+                // 닉네임 입력 (필수)
+                TextFormField(
+                  controller: _nicknameController,
+                  decoration: InputDecoration(
+                    labelText: 'auth.nickname'.tr(),
+                    hintText: 'auth.nickname_hint'.tr(),
+                    prefixIcon: const Icon(Icons.person_outline),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppColors.gray300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppColors.labIndigo),
+                    ),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'auth.nickname_required'.tr();
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: AppSpacing.l),
+
+                // 한줄 소개 입력 (선택)
+                TextFormField(
+                  controller: _bioController,
+                  decoration: InputDecoration(
+                    labelText: 'auth.bio'.tr(),
+                    hintText: 'auth.bio_hint'.tr(),
+                    prefixIcon: const Icon(Icons.info_outline),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppColors.gray300),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: AppColors.labIndigo),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: AppSpacing.l),
 
